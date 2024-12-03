@@ -1,0 +1,49 @@
+﻿@page "/artists/create"
+@using DAL.Entities
+@using PL.Service
+@inject IArtistService ArtistService
+@inject NavigationManager NavigationManager
+
+<h3>Thêm Nghệ Sĩ Mới</h3>
+
+<EditForm Model="@newArtist" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="Name">Tên Nghệ Sĩ</label>
+        <InputText id="Name" class="form-control" @bind-Value="newArtist.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Country">Quốc Gia</label>
+        <InputText id="Country" class="form-control" @bind-Value="newArtist.Country" />
+    </div>
+
+    <div class="form-group">
+        <label for="Bio">Tiểu Sử</label>
+        <InputTextArea id="Bio" class="form-control" @bind-Value="newArtist.Bio" />
+    </div>
+
+    <div class="form-group">
+        <label for="DateOfBirth">Ngày Sinh</label>
+        <InputDate id="DateOfBirth" class="form-control" @bind-Value="newArtist.DateOfBirth" />
+    </div>
+
+    <div class="form-group">
+        <label for="ImagePath">Đường Dẫn Hình Ảnh</label>
+        <InputText id="ImagePath" class="form-control" @bind-Value="newArtist.ImagePath" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Thêm Nghệ Sĩ</button>
+</EditForm>
+
+@code {
+    private Artist newArtist = new Artist();
+
+    private async Task HandleValidSubmit()
+    {
+        await ArtistService.AddAsync(newArtist);
+        NavigationManager.NavigateTo("/artists");
+    }
+}

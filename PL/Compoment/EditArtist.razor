@@ -1,0 +1,62 @@
+﻿@page "/artists/edit/{ArtistId:int}"
+@using DAL.Entities
+@using PL.Service
+@inject IArtistService ArtistService
+@inject NavigationManager NavigationManager
+
+<h3>Chỉnh Sửa Nghệ Sĩ</h3>
+
+@if (artistToEdit == null)
+{
+    <p>Đang tải...</p>
+}
+else
+{
+    <EditForm Model="@artistToEdit" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="Name">Tên Nghệ Sĩ</label>
+            <InputText id="Name" class="form-control" @bind-Value="artistToEdit.Name" />
+        </div>
+
+        <div class="form-group">
+            <label for="Country">Quốc Gia</label>
+            <InputText id="Country" class="form-control" @bind-Value="artistToEdit.Country" />
+        </div>
+
+        <div class="form-group">
+            <label for="Bio">Tiểu Sử</label>
+            <InputTextArea id="Bio" class="form-control" @bind-Value="artistToEdit.Bio" />
+        </div>
+
+        <div class="form-group">
+            <label for="DateOfBirth">Ngày Sinh</label>
+            <InputDate id="DateOfBirth" class="form-control" @bind-Value="artistToEdit.DateOfBirth" />
+        </div>
+
+        <div class="form-group">
+            <label for="ImagePath">Đường Dẫn Hình Ảnh</label>
+            <InputText id="ImagePath" class="form-control" @bind-Value="artistToEdit.ImagePath" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cập Nhật Nghệ Sĩ</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int ArtistId { get; set; }
+    private Artist artistToEdit;
+
+    protected override async Task OnInitializedAsync()
+    {
+        artistToEdit = await ArtistService.GetByIdAsync(ArtistId);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await ArtistService.UpdateAsync(ArtistId, artistToEdit);
+        NavigationManager.NavigateTo("/artists");
+    }
+}

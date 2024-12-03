@@ -1,0 +1,74 @@
+﻿@page "/artists"
+@using DAL.Entities
+@using PL.Service
+@inject IArtistService ArtistService
+@inject NavigationManager NavigationManager
+
+<h3>Danh sách Nghệ sĩ</h3>
+
+@if (artists == null)
+{
+    <p>Đang tải dữ liệu...</p>
+}
+else if (!artists.Any())
+{
+    <p>Không có nghệ sĩ nào.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên Nghệ sĩ</th>
+                <th>Tiểu sử</th>
+                <th>Quốc gia</th>
+                <th>Ngày sinh</th>
+                <th>Hình ảnh</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var artist in artists)
+            {
+                <tr>
+                    <td>@(artists.IndexOf(artist) + 1)</td>
+                    <td>@artist.Name</td>
+                    <td>@artist.Bio</td>
+                    <td>@artist.Country</td>
+                    <td>@artist.DateOfBirth?.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(artist.ImagePath))
+                        {
+                            <img src="@artist.ImagePath" alt="Artist Image" width="100" height="100" />
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-warning" @onclick="() => EditArtist(artist.ArtistId)">Sửa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button class="btn btn-primary" @onclick="CreateNewArtist">Thêm Nghệ sĩ</button>
+}
+
+@code {
+    private List<Artist> artists;
+
+    protected override async Task OnInitializedAsync()
+    {
+       artists = (await ArtistService.GetAllAsync()).ToList();
+    }
+
+    private void EditArtist(int artistId)
+    {
+        NavigationManager.NavigateTo($"/artists/edit/{artistId}");
+    }
+
+    private void CreateNewArtist()
+    {
+        NavigationManager.NavigateTo("/artists/create");
+    }
+}
