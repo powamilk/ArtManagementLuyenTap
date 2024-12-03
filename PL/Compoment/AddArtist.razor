@@ -31,8 +31,9 @@
     </div>
 
     <div class="form-group">
-        <label for="ImagePath">Đường Dẫn Hình Ảnh</label>
+        <label for="ImagePath">Đường Dẫn Hình Ảnh (URL)</label>
         <InputText id="ImagePath" class="form-control" @bind-Value="newArtist.ImagePath" />
+        <small class="form-text text-muted">Nhập URL của hình ảnh</small>
     </div>
 
     <button type="submit" class="btn btn-primary">Thêm Nghệ Sĩ</button>
@@ -44,6 +45,7 @@
     private async Task HandleValidSubmit()
     {
         await ArtistService.AddAsync(newArtist);
+
         NavigationManager.NavigateTo("/artists");
     }
 }

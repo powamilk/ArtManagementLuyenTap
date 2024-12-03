@@ -42,6 +42,10 @@ else
                         {
                             <img src="@artist.ImagePath" alt="Artist Image" width="100" height="100" />
                         }
+                        else
+                        {
+                            <span>Chưa có hình ảnh</span>
+                        }
                     </td>
                     <td>
                         <button class="btn btn-warning" @onclick="() => EditArtist(artist.ArtistId)">Sửa</button>
@@ -59,7 +63,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-       artists = (await ArtistService.GetAllAsync()).ToList();
+        artists = (await ArtistService.GetAllAsync()).ToList();
     }
 
     private void EditArtist(int artistId)

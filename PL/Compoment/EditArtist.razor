@@ -52,6 +52,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         artistToEdit = await ArtistService.GetByIdAsync(ArtistId);
+
+        if (artistToEdit == null)
+        {
+            NavigationManager.NavigateTo("/artists");
+        }
     }
 
     private async Task HandleValidSubmit()
